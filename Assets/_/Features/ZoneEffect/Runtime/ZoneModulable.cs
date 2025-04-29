@@ -25,7 +25,14 @@ namespace ZoneEffect.Runtime
         }
         private void OnMouseDown()
         {
-            _IsDragging = true;
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0;
+            
+            float distance = Vector2.Distance(transform.position, mousePosition);
+            float currentRadius = transform.localScale.x * 0.5f;
+            
+            if (distance > currentRadius && distance <= currentRadius + _tolerence)
+                _IsDragging = true;
         }
 
         private void OnMouseUp()
@@ -65,7 +72,7 @@ namespace ZoneEffect.Runtime
         [SerializeField] private float _minRadius = 1f;
         [SerializeField] private float _maxRadius = 5f;
         [SerializeField] private float _forceScale = 2f;
-        
+        [SerializeField] private float _tolerence = 0.3f;
         private bool _IsDragging = false;
         private Vector2 _DragStartPosition;
         private ForceZone _forceZone;

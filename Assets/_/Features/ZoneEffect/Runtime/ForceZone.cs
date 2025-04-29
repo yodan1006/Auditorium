@@ -18,8 +18,13 @@ namespace ZoneEffect.Runtime
             float maxSpeed = 5f;
             if (rb != null)
             {
+                float distance = Vector2.Distance(transform.position, rb.position);
+                float radius = GetComponent<CircleCollider2D>().radius * transform.lossyScale.x;
+                
+                float intensity = 1f - Mathf.Clamp01(distance / radius);
+                
                 Vector2 direction = _directionTransform.up;
-                rb.AddForce(direction * _forceMagnitude, ForceMode2D.Force);
+                rb.AddForce(direction * _forceMagnitude * intensity, ForceMode2D.Force);
                 if (rb.linearVelocity.magnitude > maxSpeed)
                 {
                     rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
@@ -34,7 +39,7 @@ namespace ZoneEffect.Runtime
 
         public void SetMagnitude(float value)
         {
-            _forceMagnitude = value;
+            _forceMagnitude = value * 50f;
         }
         
         #endregion
